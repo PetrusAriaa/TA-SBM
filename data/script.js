@@ -148,36 +148,59 @@ var toggleRecord = false;
 const socket = new WebSocket(`ws://${espIP}:81`);
 
 socket.onmessage = (event) => {
-	// console.log('[socket] ' + event.data);
+	console.log('[socket] ' + event.data);
 	var response = JSON.parse(event.data);
+
+	const d = new Date();
+	let curtime = d.getTime();
+
+	var dist = parseInt(response.potentiometer) / 341.25;
+	var distance = dist.toFixed(2);
+
 	var resData = {
+		time: curtime,
 		temperature: parseFloat(response.temperature),
 		humidity: parseFloat(response.humidity),
-		potentiometer: parseInt(response.potentiometer),
+		distance: distance,
+		tilt: parseFloat(response.tilt),
 	};
-	if (toggleRecord) {
-		cache.push(resData);
-	}
-	gaugeTemp.value = parseFloat(resData.temperature);
+
 	gaugeHum.value = parseFloat(resData.humidity);
+	gaugeTemp.value = parseFloat(resData.temperature);
 
 	// gaugePot.value = parseInt(resData.potentiometer);
 
-	var velocity = resData.potentiometer / 292.5;
-	document.getElementById('messageHolder').textContent = velocity.toFixed(2);
+	document.getElementById('messageHolder').textContent = distance;
+	if (toggleRecord) {
+		cache.push(resData);
+	}
 };
 
-const getData = () => {
-	// var data = await fetch('http://127.0.0.1:3300/api/mission_data');
-	// var dataJson = await data.json();
-	// console.log(dataJson);
+const handlePost = async (mission_name) => {
+	const response = await fetch('http://127.0.0.1:3300/api/data', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			mission_name: mission_name,
+			data: cache,
+		}),
+	});
+	const responseJson = await response.json();
+	console.log(responseJson);
+};
+
+const recData = () => {
 	toggleRecord = !toggleRecord;
 	console.log(toggleRecord);
 	if (cache != [] && toggleRecord == false) {
 		console.log(cache);
+		var mission_name = prompt('Simpan misi:');
+		handlePost(mission_name);
 		cache = [];
 	}
 };
 
 const button1 = document.getElementById('fetch_button');
-button1.addEventListener('click', getData);
+button1.addEventListener('click', recData);
