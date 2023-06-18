@@ -10,20 +10,20 @@
 			href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
 			integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
 			crossorigin="anonymous" />
-		<link
-			rel="stylesheet"
-			type="text/css"
-			href="style.css" />
 		<script src="http://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/all/gauge.min.js"></script>
 		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
 	<body class="bg-slate-900 text-slate-200 pb-20 md:pb-0">
 		<div
-			class="sticky top-0 backdrop-blur-sm py-10 px-4 bg-slate-600/50 md:bg-slate-500/20 outline outline-1 outline-slate-500/75 rounded-b-2xl space-y-2">
+			class="sticky top-0 text-center backdrop-blur-sm py-10 px-4 bg-slate-600/50 md:bg-slate-500/20 outline outline-1 outline-slate-500/75 rounded-b-2xl space-y-2">
 			<h1 class="text-3xl font-semibold">
 				Temperature and Humidity Sensors Reader
 			</h1>
 			<h2>Microcontroller Teammate Project</h2>
+			<div>
+				<a href="/">Home</a>
+				<a href="/records.html">Records</a>
+			</div>
 		</div>
 		<div
 			class="flex flex-col md:flex-row py-10 items-center space-y-10 md:justify-center md:space-x-10">
@@ -40,10 +40,10 @@
 				<canvas id="gauge-humidity"></canvas>
 			</div>
 			<div>
-				<p>Velocity: <span id="messageHolder"></span> m/s</p>
+				<p>Distance: <span id="messageHolder"></span> m</p>
 			</div>
 			<div>
-				<button id="fetch_button">ClickMe</button>
+				<button id="fetch_button">Record</button>
 			</div>
 		</div>
 		<script src="script.js"></script>

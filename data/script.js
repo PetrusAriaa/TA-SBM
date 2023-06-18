@@ -148,20 +148,29 @@ var toggleRecord = false;
 const socket = new WebSocket(`ws://${espIP}:81`);
 
 socket.onmessage = (event) => {
-	// console.log('[socket] ' + event.data);
+	console.log('[socket] ' + event.data);
 	var response = JSON.parse(event.data);
+
+	const d = new Date();
+	let curtime = d.getTime();
+
+	var dist = parseInt(response.potentiometer) / 341.25;
+	var distance = dist.toFixed(2);
+
 	var resData = {
+		time: curtime,
 		temperature: parseFloat(response.temperature),
 		humidity: parseFloat(response.humidity),
-		velocity: parseInt(response.potentiometer) / 29.5,
+		distance: distance,
+		tilt: parseFloat(response.tilt),
 	};
+
 	gaugeHum.value = parseFloat(resData.humidity);
 	gaugeTemp.value = parseFloat(resData.temperature);
-	var velocity = resData.velocity.toFixed(2);
 
 	// gaugePot.value = parseInt(resData.potentiometer);
 
-	document.getElementById('messageHolder').textContent = velocity;
+	document.getElementById('messageHolder').textContent = distance;
 	if (toggleRecord) {
 		cache.push(resData);
 	}

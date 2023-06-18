@@ -11,16 +11,16 @@
 #include <PubSubClient.h>
 
 
-const char* ssid = "Asrama_Syantikara";  // Enter SSID here
-const char* password = "syantikara2022";  //Enter Password her
+const char* ssid = "GLOBALINDO";  // Enter SSID here
+const char* password = "2022sejahtera";  //Enter Password her
 WebSocketsServer webSocket = WebSocketsServer(81);
 
-const char* mqtt_server = "192.168.0.112"; //ganti pakai ip address masing-masing
+const char* mqtt_server = "192.168.1.27"; //ganti pakai ip address masing-masing 192.168.4.113
 
 
-#define DHTPIN 4     // Digital pin connected to the DHT sensor
+#define DHTPIN 4          // Digital pin connected to the DHT sensor
 #define DHTTYPE DHT22     // DHT 22 (AM2302)
-#define POTPIN 34 ///potentiometer pin input
+#define POTPIN 34         // potentiometer pin input
 const int buttonPin1 = 33;
 const int buttonPin2 = 22;
 int buttonState1 = 0;
@@ -33,7 +33,7 @@ DHTesp dhtSensor;
 
 String value;
 unsigned long lastTime = 0;
-unsigned long timerDelay = 500;
+unsigned long timerDelay = 250;
 
 
 // Create AsyncWebServer object on port 80
