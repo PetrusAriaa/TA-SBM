@@ -154,47 +154,55 @@ socket.onmessage = (event) => {
 	const d = new Date();
 	let curtime = d.getTime();
 
-	var dist = parseInt(response.potentiometer) / 341.25;
-	var distance = dist.toFixed(2);
-
 	var resData = {
 		time: curtime,
 		temperature: parseFloat(response.temperature),
 		humidity: parseFloat(response.humidity),
-		distance: distance,
+		distance: parseFloat(response.potentiometer),
+		velocity: parseFloat(response.velocity),
 		tilt: parseFloat(response.tilt),
 	};
 
-	gaugeHum.value = parseFloat(resData.humidity);
-	gaugeTemp.value = parseFloat(resData.temperature);
+	gaugeHum.value = resData.humidity;
+	gaugeTemp.value = resData.temperature;
 
 	// gaugePot.value = parseInt(resData.potentiometer);
 
-	document.getElementById('messageHolder').textContent = distance;
+	document.getElementById('distance').textContent = resData.distance;
+	document.getElementById('velocity').textContent = resData.velocity;
 	if (toggleRecord) {
 		cache.push(resData);
 	}
 };
 
 const handlePost = async (mission_name) => {
-	const response = await fetch('http://127.0.0.1:3300/api/data', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			mission_name: mission_name,
-			data: cache,
-		}),
-	});
+	const response = await fetch(
+		'https://ta-sbm-backend-6p95.vercel.app/api/data',
+		{
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				mission_name: mission_name,
+				data: cache,
+			}),
+		}
+	);
 	const responseJson = await response.json();
 	console.log(responseJson);
 };
 
 const recData = () => {
 	toggleRecord = !toggleRecord;
+	button1.classList.remove('hover:bg-slate-700/50');
+	button1.classList.add('bg-sky-500');
+	button1.classList.add('hover:bg-sky-600');
 	console.log(toggleRecord);
 	if (cache != [] && toggleRecord == false) {
+		button1.classList.remove('bg-sky-500');
+		button1.classList.remove('hover:bg-sky-600');
+		button1.classList.add('hover:bg-slate-700/50');
 		console.log(cache);
 		var mission_name = prompt('Simpan misi:');
 		handlePost(mission_name);
