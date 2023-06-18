@@ -15,8 +15,8 @@ const char* ssid = "GLOBALINDO";  // Enter SSID here
 const char* password = "2022sejahtera";  //Enter Password her
 WebSocketsServer webSocket = WebSocketsServer(81);
 
-const char* mqtt_server = "192.168.1.27"; //ganti pakai ip address masing-masing 192.168.4.113
 
+const char* mqtt_server = "192.168.1.27"; //ganti pakai ip address masing-masing 192.168.4.113
 
 #define DHTPIN 4          // Digital pin connected to the DHT sensor
 #define DHTTYPE DHT22     // DHT 22 (AM2302)
@@ -27,11 +27,14 @@ int buttonState1 = 0;
 int buttonState2 = 0;
 int tilt = 0;
 
+float velocity = 0;
+int prev_value = 0;
+
 // initialize sensors
 DHT dht(DHTPIN, DHTTYPE);
 DHTesp dhtSensor;
 
-String value;
+int value;
 unsigned long lastTime = 0;
 unsigned long timerDelay = 250;
 
@@ -72,25 +75,26 @@ String getSensorReadings(){
   readings["humidity"] =  String(load.humidity);
   readings["potentiometer"] =  String(value);
   readings["tilt"] = String(tilt);
-
-  Serial.println(load.temperature);
-  Serial.println(load.humidity);
-  Serial.println(value);
+  readings["velocity"] = String(velocity);
 
   char tempString[8];
   char humString[8];
   char valueString[8];
   char tiltString[8];
+  char veloString[8];
 
   dtostrf(load.temperature, 1, 2, tempString);
   dtostrf(load.humidity, 1, 2, humString);
-  value.toCharArray(valueString, 8);
+  // value.toCharArray(valueString, 8);
+  itoa(value, valueString, 10);
   itoa(tilt, tiltString, 10);
+  dtostrf(velocity, 1, 2, veloString);
 
   client.publish("esp32/temperature", tempString);
   client.publish("esp32/humidity", humString);
   client.publish("esp32/potentiometer", valueString);
   client.publish("esp32/button", tiltString);
+  client.publish("esp32/velocity", veloString);
   
   String jsonString = JSON.stringify(readings);
   return jsonString;
@@ -146,37 +150,6 @@ void setup(){
   server.begin();
 }
 
-// ini buat kalo ada input dr mqtt
-// void callback(char* topic, byte* message, unsigned int length) {
-//   Serial.print("Message arrived on topic: ");
-//   Serial.print(topic);
-//   Serial.print(". Message: ");
-//   String messageTemp;
-  
-//   for (int i = 0; i < length; i++) {
-//     Serial.print((char)message[i]);
-//     messageTemp += (char)message[i];
-//   }
-//   Serial.println();
-
-//   // Feel free to add more if statements to control more GPIOs with MQTT
-
-//   // If a message is received on the topic esp32/output, you check the message 
-//   // Changes the output state according to the message
-
-//   // NTAR DIGANTI
-//   if (String(topic) == "esp32/output") {
-//     Serial.print("Changing output to ");
-//     if(messageTemp == "on"){
-//       Serial.println("on");
-//       digitalWrite(ledPin, HIGH);
-//     }
-//     else if(messageTemp == "off"){
-//       Serial.println("off");
-//       digitalWrite(ledPin, LOW);
-//     }
-//   }
-// }
 
 void reconnect() {
   // Loop until we're reconnected
@@ -205,8 +178,7 @@ void loop() {
   }
   client.loop();
 
-  value = (String) analogRead(POTPIN);
-  // Serial.println(value);
+  value = analogRead(POTPIN);
   webSocket.loop();
 
   if ((millis() - lastTime) > timerDelay) {
@@ -226,11 +198,15 @@ void loop() {
       tilt = 359;
     }
 
-    Serial.print("tilt : ");
-    Serial.println(tilt);
+    // taking velocity
+    velocity = (value-prev_value)/(((float)timerDelay)/1000);
+    
     // Send Events to the client with the Sensor Readings Every 1/2 seconds
     sentData = getSensorReadings();
     webSocket.broadcastTXT(sentData);
+
+    prev_value = value;
     lastTime = millis();
+    
   }
 }
