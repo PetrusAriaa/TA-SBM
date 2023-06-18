@@ -28,13 +28,13 @@ int buttonState2 = 0;
 int tilt = 0;
 
 float velocity = 0;
-int prev_value = 0;
+float prev_value = 0;
 
 // initialize sensors
 DHT dht(DHTPIN, DHTTYPE);
 DHTesp dhtSensor;
 
-int value;
+float value;
 unsigned long lastTime = 0;
 unsigned long timerDelay = 250;
 
@@ -178,7 +178,7 @@ void loop() {
   }
   client.loop();
 
-  value = analogRead(POTPIN);
+  value = analogRead(POTPIN)/341.25;
   webSocket.loop();
 
   if ((millis() - lastTime) > timerDelay) {
