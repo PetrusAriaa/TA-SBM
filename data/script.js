@@ -123,6 +123,7 @@ socket.onmessage = (event) => {
 
 	document.getElementById('distance').textContent = resData.distance;
 	document.getElementById('velocity').textContent = resData.velocity;
+	document.getElementById('tilt').textContent = resData.tilt;
 	if (toggleRecord) {
 		cache.push(resData);
 	}
