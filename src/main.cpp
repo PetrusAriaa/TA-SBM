@@ -11,12 +11,12 @@
 #include <PubSubClient.h>
 
 
-const char* ssid = "GLOBALINDO";
-const char* password = "2022sejahtera";
+const char* ssid = "halo";
+const char* password = "01042004";
 WebSocketsServer webSocket = WebSocketsServer(81);
 
 
-const char* mqtt_server = "192.168.1.27"; 
+const char* mqtt_server = "192.168.4.113"; 
 
 #define DHTPIN 4     
 #define DHTTYPE DHT22
