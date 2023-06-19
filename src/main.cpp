@@ -11,16 +11,16 @@
 #include <PubSubClient.h>
 
 
-const char* ssid = "GLOBALINDO";  // Enter SSID here
-const char* password = "2022sejahtera";  //Enter Password her
+const char* ssid = "GLOBALINDO";
+const char* password = "2022sejahtera";
 WebSocketsServer webSocket = WebSocketsServer(81);
 
 
-const char* mqtt_server = "192.168.1.27"; //ganti pakai ip address masing-masing 192.168.4.113
+const char* mqtt_server = "192.168.1.27"; 
 
-#define DHTPIN 4          // Digital pin connected to the DHT sensor
-#define DHTTYPE DHT22     // DHT 22 (AM2302)
-#define POTPIN 34         // potentiometer pin input
+#define DHTPIN 4     
+#define DHTTYPE DHT22
+#define POTPIN 34
 const int buttonPin1 = 33;
 const int buttonPin2 = 22;
 int buttonState1 = 0;
@@ -85,7 +85,6 @@ String getSensorReadings(){
 
   dtostrf(load.temperature, 1, 2, tempString);
   dtostrf(load.humidity, 1, 2, humString);
-  // value.toCharArray(valueString, 8);
   itoa(value, valueString, 10);
   itoa(tilt, tiltString, 10);
   dtostrf(velocity, 1, 2, veloString);
@@ -127,7 +126,6 @@ void setup(){
   Serial.println(WiFi.localIP());
 
   client.setServer(mqtt_server, 1883);
-  // client.setCallback(callback);
 
   webSocket.begin();
   webSocket.onEvent(webSocketEvent);
@@ -138,13 +136,6 @@ void setup(){
     request->send(SPIFFS, "/index.html", "text/html");
   });
   server.serveStatic("/", SPIFFS, "/");
-
-
-  // server.on("/readings", HTTP_GET, [](AsyncWebServerRequest *request){
-  //   String json = getSensorReadings();
-  //   request->send(200, "application/json", json);
-  //   json = String();
-  // });
 
   // Start server
   server.begin();
@@ -158,13 +149,11 @@ void reconnect() {
     // Attempt to connect
     if (client.connect("ESP8266Client")) {
       Serial.println("connected");
-      // Subscribe
-      // client.subscribe("esp32/output");
+
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
       delay(5000);
     }
   }

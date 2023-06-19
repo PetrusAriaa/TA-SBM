@@ -97,51 +97,6 @@ var gaugeHum = new RadialGauge({
 	animationRule: 'linear',
 }).draw();
 
-// * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * PERHATIAN KEPADA KELUARGA BESAR JENDELA TRAVEL  *
-// * * * * * * * * * * * * * * * * * * * * * * * * * *
-// section ini tolong dibiarkan tercomment dan jangan dihapus
-// sebab akan digunakan untuk kasus-kasus berikutnya
-// terima kasih.
-
-// Create Potentio Gauge
-// var gaugePot = new RadialGauge({
-// 	renderTo: 'gauge-pot',
-// 	width: 300,
-// 	height: 300,
-// 	units: 'Potentiometer (V)',
-// 	minValue: 0,
-// 	maxValue: 4095,
-// 	colorValueBoxRect: '#049faa',
-// 	colorValueBoxRectEnd: '#049faa',
-// 	colorValueBoxBackground: '#f1fbfc',
-// 	valueInt: 2,
-// 	majorTicks: ['0', '1000', '2000', '3000', '4095'],
-// 	minorTicks: 4,
-// 	strokeTicks: true,
-// 	highlights: [
-// 		{
-// 			from: 3000,
-// 			to: 4095,
-// 			color: '#FFB6C1',
-// 		},
-// 	],
-// 	colorPlate: '#fff',
-// 	borderShadowWidth: 0,
-// 	borders: false,
-// 	needleType: 'line',
-// 	colorNeedle: '#ff1493',
-// 	colorNeedleEnd: '#ff1493',
-// 	needleWidth: 2,
-// 	needleCircleSize: 3,
-// 	colorNeedleCircleOuter: '#ff1493',
-// 	needleCircleOuter: true,
-// 	needleCircleInner: false,
-// 	animationDuration: 1500,
-// 	animationRule: 'linear',
-// }).draw();
-// gaugePot.value = 0;
-
 const espIP = window.location.host;
 var cache = [];
 var toggleRecord = false;
@@ -165,8 +120,6 @@ socket.onmessage = (event) => {
 
 	gaugeHum.value = resData.humidity;
 	gaugeTemp.value = resData.temperature;
-
-	// gaugePot.value = parseInt(resData.potentiometer);
 
 	document.getElementById('distance').textContent = resData.distance;
 	document.getElementById('velocity').textContent = resData.velocity;
