@@ -130,6 +130,7 @@ socket.onmessage = (event) => {
 };
 
 const handlePost = async (mission_name) => {
+	console.log(cache);
 	const response = await fetch(
 		'https://ta-sbm-backend-6p95.vercel.app/api/data',
 		{
@@ -145,6 +146,7 @@ const handlePost = async (mission_name) => {
 	);
 	const responseJson = await response.json();
 	console.log(responseJson);
+	cache = [];
 };
 
 const recData = () => {
@@ -160,7 +162,6 @@ const recData = () => {
 		console.log(cache);
 		var mission_name = prompt('Simpan misi:');
 		handlePost(mission_name);
-		cache = [];
 	}
 };
 

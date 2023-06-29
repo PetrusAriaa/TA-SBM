@@ -324,6 +324,3 @@ const handleClickLoad = () => {
 
 const loadButton = document.getElementById('LoadButton');
 loadButton.addEventListener('click', handleClickLoad);
-
-const testButton = document.getElementById('testButton');
-testButton.classList.remove('text-amber-400');
